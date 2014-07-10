@@ -11,7 +11,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.GestureDetector;
 import android.view.Menu;
@@ -80,6 +79,9 @@ public class MainBrowser extends Activity implements GestureDetector.OnGestureLi
         } else if (webIntent.getAction().equals("android.intent.action.VIEW")){
             if (!webIntent.getData().toString().equals("")) {
                 webView.loadUrl(webIntent.getData().toString());
+                if (getActionBar() != null) getActionBar().hide();
+                controlsView.setVisibility(View.INVISIBLE);
+                mSystemUiHider.hide();
             } else {
                 webView.loadUrl("http://www.google.com");
             }
@@ -127,6 +129,10 @@ public class MainBrowser extends Activity implements GestureDetector.OnGestureLi
         }
     }
 
+    /**
+     * Obligatory functions with the Gesture detector
+     * some of which look useful.
+     */
     @Override
     public boolean onDown(MotionEvent motionEvent) {
         return false;
