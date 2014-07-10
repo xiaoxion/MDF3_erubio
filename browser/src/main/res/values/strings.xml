@@ -2,7 +2,11 @@
 <resources>
 
     <string name="app_name">MNML Browser</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="go_button">Go</string>
+    <string name="accept">Continue</string>
+
+    <string name="action_back">Back</string>
+    <string name="action_forward">Forward</string>
+    <string name="action_reload">Reload</string>
 
 </resources>

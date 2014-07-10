@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo">
+    <style name="AppTheme" parent="android:Theme.Holo.Light">
         <!-- Customize your theme here. -->
     </style>
 
@@ -11,7 +11,15 @@
         <item name="android:windowBackground">@null</item>
         <item name="metaButtonBarStyle">@style/ButtonBar</item>
         <item name="metaButtonBarButtonStyle">@style/ButtonBarButton</item>
+        <item name="android:actionBarStyle">@style/frostedAction</item>
     </style>
+
+    <!-- Change the action bar color -->
+
+    <style name="frostedAction"
+        parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@color/white_underlay</item>
+        </style>
 
     <style name="ButtonBar">
         <item name="android:paddingLeft">2dp</item>
