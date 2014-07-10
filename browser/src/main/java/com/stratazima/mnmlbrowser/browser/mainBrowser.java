@@ -6,8 +6,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
 import android.util.Patterns;
@@ -21,14 +23,7 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 
-
-/**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- *
- * @see SystemUiHider
- */
-public class mainBrowser extends Activity implements GestureDetector.OnGestureListener{
+public class mainBrowser extends Activity implements GestureDetector.OnGestureListener {
     private static final int HIDER_FLAGS = SystemUiHider.FLAG_HIDE_NAVIGATION;
     private SystemUiHider mSystemUiHider;
     private EditText URLEditText;
@@ -43,16 +38,15 @@ public class mainBrowser extends Activity implements GestureDetector.OnGestureLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_browser);
 
-        controlsView = findViewById(R.id.fullscreen_content_controls);
         final View contentView = findViewById(R.id.fullscreen_content);
-
-        mSystemUiHider = SystemUiHider.getInstance(this, contentView, HIDER_FLAGS);
-        mSystemUiHider.setup();
-
         final GestureDetectorCompat mDetector = new GestureDetectorCompat(this,this);
-
+        final Button goButton = (Button) findViewById(R.id.dummy_button);
+        controlsView = findViewById(R.id.fullscreen_content_controls);
+        mSystemUiHider = SystemUiHider.getInstance(this, contentView, HIDER_FLAGS);
         URLEditText = (EditText) findViewById(R.id.urlEditText);
         webView = (WebView) contentView;
+
+        mSystemUiHider.setup();
 
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setLoadWithOverviewMode(true);
@@ -64,16 +58,25 @@ public class mainBrowser extends Activity implements GestureDetector.OnGestureLi
                 return true;
             }
         });
-
         webView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 return mDetector.onTouchEvent(motionEvent);
             }
         });
-        webView.loadUrl("HTTP://www.google.com");
 
-        final Button goButton = (Button) findViewById(R.id.dummy_button);
+        Intent webIntent = getIntent();
+
+        if (webIntent.getAction().equals("android.intent.action.MAIN")) {
+            webView.loadUrl("http://www.google.com");
+        } else if (webIntent.getAction().equals("android.intent.action.VIEW")){
+            if (!webIntent.getData().toString().equals("")) {
+                webView.loadUrl(webIntent.getData().toString());
+            } else {
+                webView.loadUrl("http://www.google.com");
+            }
+        }
+
         goButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -149,7 +152,7 @@ public class mainBrowser extends Activity implements GestureDetector.OnGestureLi
                 getActionBar().hide();
                 controlsView.setVisibility(View.INVISIBLE);
                 mSystemUiHider.hide();
-            }  else if (motionEvent2.getY() - motionEvent.getY() > SWIPE_MIN_DISTANCE && Math.abs(v2) > 10000) {
+            }  else if (motionEvent2.getY() - motionEvent.getY() > SWIPE_MIN_DISTANCE && Math.abs(v2) > 7500) {
                 // Scroll Up -- Reappear
                 getActionBar().show();
                 controlsView.setVisibility(View.VISIBLE);
