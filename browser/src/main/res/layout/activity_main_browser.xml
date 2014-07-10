@@ -12,12 +12,11 @@
     <WebView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/fullscreen_content" />
+        android:id="@+id/fullscreen_content"
+        android:focusable="true" />
 
-    <!-- This FrameLayout insets its children based on system windows using
-         android:fitsSystemWindows. -->
     <FrameLayout android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:fitsSystemWindows="true">
 
         <LinearLayout android:id="@+id/fullscreen_content_controls"
@@ -46,5 +45,8 @@
 
         </LinearLayout>
     </FrameLayout>
+
+    <!-- This FrameLayout insets its children based on system windows using
+         android:fitsSystemWindows. -->
 
 </FrameLayout>

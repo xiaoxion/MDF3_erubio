@@ -35,18 +35,12 @@ public class SystemUiHiderBase extends SystemUiHider {
     }
 
     @Override
-    public boolean isVisible() {
-        return mVisible;
-    }
-
-    @Override
     public void hide() {
         if ((mFlags & FLAG_FULLSCREEN) != 0) {
             mActivity.getWindow().setFlags(
                     WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
-        mOnVisibilityChangeListener.onVisibilityChange(false);
         mVisible = false;
     }
 
@@ -57,7 +51,6 @@ public class SystemUiHiderBase extends SystemUiHider {
                     0,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
-        mOnVisibilityChangeListener.onVisibilityChange(true);
         mVisible = true;
     }
 }

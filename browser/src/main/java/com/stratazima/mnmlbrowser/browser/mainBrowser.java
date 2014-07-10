@@ -2,30 +2,24 @@ package com.stratazima.mnmlbrowser.browser;
 
 import com.stratazima.mnmlbrowser.browser.util.SystemUiHider;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
+import android.support.v4.view.GestureDetectorCompat;
 import android.util.Patterns;
+import android.view.GestureDetector;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.webkit.URLUtil;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-
-import java.util.regex.Pattern;
 
 
 /**
@@ -34,77 +28,29 @@ import java.util.regex.Pattern;
  *
  * @see SystemUiHider
  */
-public class mainBrowser extends Activity {
-    private static final boolean AUTO_HIDE = true;
-    private static final int AUTO_HIDE_DELAY_MILLIS = 3000;
-    private static final boolean TOGGLE_ON_CLICK = true;
+public class mainBrowser extends Activity implements GestureDetector.OnGestureListener{
     private static final int HIDER_FLAGS = SystemUiHider.FLAG_HIDE_NAVIGATION;
     private SystemUiHider mSystemUiHider;
-    private Button goButton;
     private EditText URLEditText;
     private WebView webView;
+    private View controlsView;
 
-    Handler mHideHandler = new Handler();
-    Runnable mHideRunnable = new Runnable() {
-        @Override
-        public void run() {
-            mSystemUiHider.hide();
-        }
-    };
+    private static final int SWIPE_MIN_DISTANCE = 120;
+    private static final int SWIPE_MAX_OFF_PATH = 250;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_browser);
 
-        final View controlsView = findViewById(R.id.fullscreen_content_controls);
+        controlsView = findViewById(R.id.fullscreen_content_controls);
         final View contentView = findViewById(R.id.fullscreen_content);
 
         mSystemUiHider = SystemUiHider.getInstance(this, contentView, HIDER_FLAGS);
         mSystemUiHider.setup();
-        mSystemUiHider
-                .setOnVisibilityChangeListener(new SystemUiHider.OnVisibilityChangeListener() {
-                    // Cached values.
-                    int mControlsHeight;
-                    int mShortAnimTime;
 
-                    @Override
-                    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-                    public void onVisibilityChange(boolean visible) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-                            // If the ViewPropertyAnimator API is available
-                            // (Honeycomb MR2 and later), use it to animate the
-                            // in-layout UI controls at the bottom of the
-                            // screen.
-                            controlsView.animate()
-                                    .translationY(visible ? 0 : 0)
-                                    .setDuration(mShortAnimTime);
-                        } else {
-                            // If the ViewPropertyAnimator APIs aren't
-                            // available, simply show or hide the in-layout UI
-                            // controls.
-                            controlsView.setVisibility(visible ? View.VISIBLE : View.GONE);
-                        }
+        final GestureDetectorCompat mDetector = new GestureDetectorCompat(this,this);
 
-                        if (visible && AUTO_HIDE) {
-                            // Schedule a hide().
-                            delayedHide(AUTO_HIDE_DELAY_MILLIS);
-                        }
-                    }
-                });
-
-        contentView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (TOGGLE_ON_CLICK) {
-                    mSystemUiHider.toggle();
-                } else {
-                    mSystemUiHider.show();
-                }
-            }
-        });
-
-        goButton = (Button) findViewById(R.id.dummy_button);
         URLEditText = (EditText) findViewById(R.id.urlEditText);
         webView = (WebView) contentView;
 
@@ -119,8 +65,15 @@ public class mainBrowser extends Activity {
             }
         });
 
+        webView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return mDetector.onTouchEvent(motionEvent);
+            }
+        });
         webView.loadUrl("HTTP://www.google.com");
 
+        final Button goButton = (Button) findViewById(R.id.dummy_button);
         goButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -131,12 +84,6 @@ public class mainBrowser extends Activity {
         if (!isNetworkOnline()) {
             onNoNetworkDialog("Please Connect to Internet");
         }
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        delayedHide(100);
     }
 
     @Override
@@ -165,6 +112,54 @@ public class mainBrowser extends Activity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public boolean onDown(MotionEvent motionEvent) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent motionEvent) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent motionEvent) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent2, float v, float v2) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent motionEvent) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent2, float v, float v2) {
+        try {
+            if (Math.abs(motionEvent.getX() - motionEvent2.getX()) > SWIPE_MAX_OFF_PATH)
+                return false;
+            if(motionEvent.getY() - motionEvent2.getY() > SWIPE_MIN_DISTANCE) {
+                // Scroll Down -- Disappear
+                getActionBar().hide();
+                controlsView.setVisibility(View.INVISIBLE);
+                mSystemUiHider.hide();
+            }  else if (motionEvent2.getY() - motionEvent.getY() > SWIPE_MIN_DISTANCE && Math.abs(v2) > 10000) {
+                // Scroll Up -- Reappear
+                getActionBar().show();
+                controlsView.setVisibility(View.VISIBLE);
+                mSystemUiHider.show();
+            }
+        } catch (Exception e) {
+            // nothing
+        }
+
+        return false;
     }
 
     private void onGo(){
@@ -210,10 +205,5 @@ public class mainBrowser extends Activity {
         // Create the AlertDialog object and return it
         AlertDialog alertBuilder =  builder.create();
         alertBuilder.show();
-    }
-
-    private void delayedHide(int delayMillis) {
-        mHideHandler.removeCallbacks(mHideRunnable);
-        mHideHandler.postDelayed(mHideRunnable, delayMillis);
     }
 }

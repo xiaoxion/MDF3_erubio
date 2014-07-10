@@ -73,11 +73,6 @@ public abstract class SystemUiHider {
     protected int mFlags;
 
     /**
-     * The current visibility callback.
-     */
-    protected OnVisibilityChangeListener mOnVisibilityChangeListener = sDummyListener;
-
-    /**
      * Creates and returns an instance of {@link SystemUiHider} that is
      * appropriate for this device. The object will be either a
      * {@link SystemUiHiderBase} or {@link SystemUiHiderHoneycomb} depending on
@@ -112,11 +107,6 @@ public abstract class SystemUiHider {
     public abstract void setup();
 
     /**
-     * Returns whether or not the system UI is visible.
-     */
-    public abstract boolean isVisible();
-
-    /**
      * Hide the system UI.
      */
     public abstract void hide();
@@ -125,48 +115,4 @@ public abstract class SystemUiHider {
      * Show the system UI.
      */
     public abstract void show();
-
-    /**
-     * Toggle the visibility of the system UI.
-     */
-    public void toggle() {
-        if (isVisible()) {
-            hide();
-        } else {
-            show();
-        }
-    }
-
-    /**
-     * Registers a callback, to be triggered when the system UI visibility
-     * changes.
-     */
-    public void setOnVisibilityChangeListener(OnVisibilityChangeListener listener) {
-        if (listener == null) {
-            listener = sDummyListener;
-        }
-
-        mOnVisibilityChangeListener = listener;
-    }
-
-    /**
-     * A dummy no-op callback for use when there is no other listener set.
-     */
-    private static OnVisibilityChangeListener sDummyListener = new OnVisibilityChangeListener() {
-        @Override
-        public void onVisibilityChange(boolean visible) {
-        }
-    };
-
-    /**
-     * A callback interface used to listen for system UI visibility changes.
-     */
-    public interface OnVisibilityChangeListener {
-        /**
-         * Called when the system UI visibility has changed.
-         * 
-         * @param visible True if the system UI is visible.
-         */
-        public void onVisibilityChange(boolean visible);
-    }
 }
