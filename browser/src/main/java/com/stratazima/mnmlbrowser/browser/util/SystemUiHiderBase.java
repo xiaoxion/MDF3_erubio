@@ -4,21 +4,15 @@ import android.app.Activity;
 import android.view.View;
 import android.view.WindowManager;
 
-/**
- * A base implementation of {@link SystemUiHider}. Uses APIs available in all
- * API levels to show and hide the status bar.
+/*
+Author:  Esau Rubio
+Project: MNML Browser
+Package: util.SystemUiHiderBase
+Date:    7/8/2014
  */
-public class SystemUiHiderBase extends SystemUiHider {
-    /**
-     * Whether or not the system UI is currently visible. This is a cached value
-     * from calls to {@link #hide()} and {@link #show()}.
-     */
-    private boolean mVisible = true;
 
-    /**
-     * Constructor not intended to be called by clients. Use
-     * {@link SystemUiHider#getInstance} to obtain an instance.
-     */
+public class SystemUiHiderBase extends SystemUiHider {
+
     protected SystemUiHiderBase(Activity activity, View anchorView, int flags) {
         super(activity, anchorView, flags);
     }
@@ -34,6 +28,7 @@ public class SystemUiHiderBase extends SystemUiHider {
         }
     }
 
+    // Hides the Ui
     @Override
     public void hide() {
         if ((mFlags & FLAG_FULLSCREEN) != 0) {
@@ -41,9 +36,9 @@ public class SystemUiHiderBase extends SystemUiHider {
                     WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
-        mVisible = false;
     }
 
+    // Shows the Ui
     @Override
     public void show() {
         if ((mFlags & FLAG_FULLSCREEN) != 0) {
@@ -51,6 +46,5 @@ public class SystemUiHiderBase extends SystemUiHider {
                     0,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
-        mVisible = true;
     }
 }

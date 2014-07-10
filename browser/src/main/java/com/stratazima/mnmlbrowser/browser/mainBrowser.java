@@ -9,9 +9,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.GestureDetector;
 import android.view.Menu;
@@ -23,7 +23,14 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class mainBrowser extends Activity implements GestureDetector.OnGestureListener {
+/*
+Author:  Esau Rubio
+Project: MNML Browser
+Package: MainBrowser
+Date:    7/8/2014
+ */
+
+public class MainBrowser extends Activity implements GestureDetector.OnGestureListener {
     private static final int HIDER_FLAGS = SystemUiHider.FLAG_HIDE_NAVIGATION;
     private SystemUiHider mSystemUiHider;
     private EditText URLEditText;
@@ -33,6 +40,7 @@ public class mainBrowser extends Activity implements GestureDetector.OnGestureLi
     private static final int SWIPE_MIN_DISTANCE = 120;
     private static final int SWIPE_MAX_OFF_PATH = 250;
 
+    // Sets the views and receives intents
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,12 +97,14 @@ public class mainBrowser extends Activity implements GestureDetector.OnGestureLi
         }
     }
 
+    // Inflates the menu and sets it
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
+    // Handles which button is clicked in the menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -142,29 +152,32 @@ public class mainBrowser extends Activity implements GestureDetector.OnGestureLi
 
     }
 
+    // Handles the fling action and captures gestures on the app
     @Override
     public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent2, float v, float v2) {
         try {
-            if (Math.abs(motionEvent.getX() - motionEvent2.getX()) > SWIPE_MAX_OFF_PATH)
-                return false;
-            if(motionEvent.getY() - motionEvent2.getY() > SWIPE_MIN_DISTANCE) {
-                // Scroll Down -- Disappear
-                getActionBar().hide();
-                controlsView.setVisibility(View.INVISIBLE);
-                mSystemUiHider.hide();
-            }  else if (motionEvent2.getY() - motionEvent.getY() > SWIPE_MIN_DISTANCE && Math.abs(v2) > 7500) {
-                // Scroll Up -- Reappear
-                getActionBar().show();
-                controlsView.setVisibility(View.VISIBLE);
-                mSystemUiHider.show();
+            if (Math.abs(motionEvent.getX() - motionEvent2.getX()) > SWIPE_MAX_OFF_PATH) return false;
+            if (getActionBar() != null) {
+                if(motionEvent.getY() - motionEvent2.getY() > SWIPE_MIN_DISTANCE) {
+                    // Scroll Down -- Disappear
+                    getActionBar().hide();
+                    controlsView.setVisibility(View.INVISIBLE);
+                    mSystemUiHider.hide();
+                }  else if (motionEvent2.getY() - motionEvent.getY() > SWIPE_MIN_DISTANCE && Math.abs(v2) > 7500) {
+                    // Scroll Up -- Reappear
+                    getActionBar().show();
+                    controlsView.setVisibility(View.VISIBLE);
+                    mSystemUiHider.show();
+                }
             }
         } catch (Exception e) {
-            // nothing
+            e.printStackTrace();
         }
 
         return false;
     }
 
+    // Go to the web page or sets error if it's invalid
     private void onGo(){
         if (!isNetworkOnline()) {
             onNoNetworkDialog("Need Internet to Load Page");
@@ -184,6 +197,7 @@ public class mainBrowser extends Activity implements GestureDetector.OnGestureLi
         }
     }
 
+    // Checks if there is a valid network connection
     public boolean isNetworkOnline() {
         boolean status = false;
 
@@ -198,6 +212,7 @@ public class mainBrowser extends Activity implements GestureDetector.OnGestureLi
         return status;
     }
 
+    // Creates a dialog for user feedback
     private void onNoNetworkDialog(String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(message)
