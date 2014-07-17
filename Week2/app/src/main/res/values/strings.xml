@@ -3,9 +3,16 @@
 
     <string name="app_name">foodTrack</string>
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_add">Add Food</string>
 
     <string name="foodImage">Food Image</string>
     <string name="largeDesc">Healthy</string>
     <string name="smallDesc">Plate of: Spaghetti and Meatballs</string>
+
+    <string-array name="healthRating">
+        <item>Healthy</item>
+        <item>Neutral</item>
+        <item>Unhealthy</item>
+    </string-array>
+
 </resources>
