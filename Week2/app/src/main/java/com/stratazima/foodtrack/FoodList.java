@@ -1,8 +1,7 @@
 package com.stratazima.foodtrack;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
+import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,21 +10,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.util.ArrayList;
 
 
-public class FoodList extends Activity {
+public class FoodList extends ListActivity {
     public static final String PREFS_NAME = "BootPreferences";
     private File[] files;
     private int CAPTURE_IMAGE_REQUEST_CODE = 1001;
@@ -37,9 +30,9 @@ public class FoodList extends Activity {
 
         // Restore preferences
         SharedPreferences bootSetting = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        File healthy = new File(getFilesDir() + "/healthy");
-        File neutral = new File(getFilesDir() + "/neutral");
-        File unhealthy = new File(getFilesDir() + "/unhealthy");
+        File healthy = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/healthy");
+        File neutral = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/neutral");
+        File unhealthy = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/unhealthy");
 
         files = new File[] {healthy, neutral, unhealthy};
 
@@ -57,7 +50,6 @@ public class FoodList extends Activity {
             }
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -80,20 +72,13 @@ public class FoodList extends Activity {
     }
 
     @Override
-    public void startActivityForResult(Intent intent, int requestCode) {
-        super.startActivityForResult(intent, requestCode);
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                Toast.makeText(this, "Image saved to:\n" + data.getData(), Toast.LENGTH_LONG).show();
-            }
-            else if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(this, "Image Captured!", Toast.LENGTH_LONG).show();
+            } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "Image not Captured", Toast.LENGTH_LONG).show();
-            }
-            else {
+            } else {
                 Toast.makeText(this, "Failed! Check Device Camera!", Toast.LENGTH_LONG).show();
             }
         }
@@ -102,15 +87,26 @@ public class FoodList extends Activity {
 
     // Creates the list with the headers.
     private void onListCreate() {
+        ArrayList<String> daList = new ArrayList<String>();
 
+        for (int i = 0; i < 3; i++) {
+            daList.add(onSelectHealth(i));
+            String[] listing = files[i].list();
+            for (int l = 0; l < files[i].list().length; l++) {
+                daList.add(files[i] + "/" + listing[l]);
+            }
+        }
+
+        CustomList adapter = new CustomList(this, daList);
+        setListAdapter(adapter);
     }
 
     // starts the intent for the photo
     private void onCameraStart(int healthRating) {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         Long tsLong = System.currentTimeMillis()/1000;
 
-        File tempFile = new File(files[healthRating] + "/" + tsLong.toString() + ".png");
+        File tempFile = new File(files[healthRating] + "/" + onSelectHealth(healthRating) + "_" + tsLong.toString() + ".png");
         Uri uriSavedImage = Uri.fromFile(tempFile);
 
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
@@ -129,5 +125,25 @@ public class FoodList extends Activity {
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private String onSelectHealth(int healthRating) {
+        String tempString;
+
+        switch (healthRating) {
+            case 0:
+                tempString = "healthy";
+                break;
+            case 1:
+                tempString = "neutral";
+                break;
+            case 2:
+                tempString = "unhealthy";
+                break;
+            default:
+                tempString = "error";
+        }
+
+        return tempString;
     }
 }
