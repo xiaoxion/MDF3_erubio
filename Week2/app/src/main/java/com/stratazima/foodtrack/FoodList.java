@@ -2,6 +2,8 @@ package com.stratazima.foodtrack;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,13 +17,17 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+
+import android.support.v4.app.NotificationCompat;
 
 
 public class FoodList extends ListActivity {
     public static final String PREFS_NAME = "BootPreferences";
     private File[] files;
     private int CAPTURE_IMAGE_REQUEST_CODE = 1001;
+    private ArrayList<Integer> theList = new ArrayList<Integer>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,13 +91,45 @@ public class FoodList extends ListActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    protected void onStop() {
+        final Intent emptyIntent = new Intent();
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 101, emptyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        String tempType = null;
+        int tempInt = 0;
+        for (int i = 0; i < theList.size(); i++) {
+            if (theList.get(i) > tempInt) {
+                if (i == 0) tempType = "Healthy";
+                if (i == 1) tempType = "Neutral";
+                if (i == 2) tempType = "Unhealthy";
+
+                tempInt = theList.get(i);
+            }
+        }
+
+        if (tempInt == 0 || theList.get(0).equals(theList.get(2))) tempType = "Neutral";
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setContentTitle("Health Update")
+                        .setContentText(tempType)
+                        .setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(102, mBuilder.build());
+
+        super.onStop();
+    }
+
     // Creates the list with the headers.
     private void onListCreate() {
         ArrayList<String> daList = new ArrayList<String>();
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i <= 2; i++) {
             daList.add(onSelectHealth(i));
             String[] listing = files[i].list();
+            theList.add(files[i].list().length);
             for (int l = 0; l < files[i].list().length; l++) {
                 daList.add(files[i] + "/" + listing[l]);
             }
