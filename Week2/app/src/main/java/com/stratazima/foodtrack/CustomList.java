@@ -17,21 +17,22 @@ import java.util.ArrayList;
 public class CustomList extends ArrayAdapter<String> {
     private final Activity context;
     private final ArrayList<String> daList;
+    private final LayoutInflater inflater;
 
-    public CustomList(Activity context, ArrayList<String> daList) {
-        super(context, R.layout.item_food, daList);
+    public CustomList(Activity context, String[] daSize , ArrayList<String> daList) {
+        super(context, R.layout.item_food, daSize);
 
         this.context = context;
         this.daList = daList;
+        inflater = context.getLayoutInflater();
     }
 
     @Override
     public View getView(int position, View view, ViewGroup parent) {
-        LayoutInflater inflater = context.getLayoutInflater();
-        View rowView;
+        View rowView = view;
 
         if (daList.get(position).contains(".png")) {
-            rowView = inflater.inflate(R.layout.item_food, null, true);
+            if (rowView == null) rowView = inflater.inflate(R.layout.item_food, null, true);
 
             TextView mainTitle = (TextView) rowView.findViewById(R.id.health_rating);
             ImageView imageView = (ImageView) rowView.findViewById(R.id.food_image);
@@ -39,7 +40,7 @@ public class CustomList extends ArrayAdapter<String> {
             mainTitle.setText(onGetMainText(position));
             imageView.setImageURI(Uri.parse(daList.get(position)));
         } else {
-            rowView = inflater.inflate(R.layout.item_header, null, true);
+            if (rowView == null) rowView = inflater.inflate(R.layout.item_header, null, true);
             rowView.setEnabled(false);
 
             TextView mainTitle = (TextView) rowView.findViewById(R.id.headerTextView);
@@ -51,12 +52,12 @@ public class CustomList extends ArrayAdapter<String> {
 
     private String onGetMainText(int position) {
         String tempString = daList.get(position);
-        if (tempString.contains("healthy")) {
-            return "Healthy";
+        if (tempString.contains("unhealthy")) {
+            return "Unhealthy";
         } else if (tempString.contains("neutral")) {
             return "Neutral";
-        } else if (tempString.contains("unhealthy")) {
-            return "Unhealthy";
+        } else if (tempString.contains("healthy")) {
+            return "Healthy";
         } else {
             return "Error";
         }

@@ -17,7 +17,6 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import android.support.v4.app.NotificationCompat;
@@ -108,7 +107,7 @@ public class FoodList extends ListActivity {
             }
         }
 
-        if (tempInt == 0 || theList.get(0).equals(theList.get(2))) tempType = "Neutral";
+        if (tempInt == 0 || theList.get(0) == theList.get(2)) tempType = "Neutral";
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_launcher)
@@ -126,7 +125,7 @@ public class FoodList extends ListActivity {
     private void onListCreate() {
         ArrayList<String> daList = new ArrayList<String>();
 
-        for (int i = 0; i <= 2; i++) {
+        for (int i = 0; i < 3; i++) {
             daList.add(onSelectHealth(i));
             String[] listing = files[i].list();
             theList.add(files[i].list().length);
@@ -135,7 +134,9 @@ public class FoodList extends ListActivity {
             }
         }
 
-        CustomList adapter = new CustomList(this, daList);
+        String[] daSize = new String[daList.size()];
+
+        CustomList adapter = new CustomList(this, daSize, daList);
         setListAdapter(adapter);
     }
 
