@@ -10,5 +10,8 @@ public class SetupActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup);
+
+        DataStorage dataStorage = DataStorage.getInstance(this);
+        dataStorage.onGetJSON();
     }
 }
