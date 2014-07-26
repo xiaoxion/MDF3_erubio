@@ -1,23 +1,14 @@
 package com.stratazima.instaviewer;
 
 import android.app.Activity;
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RemoteViews;
 
-import com.androidquery.AQuery;
 import com.stratazima.instaviewer.processes.DataStorage;
-import com.stratazima.instaviewer.widget.WidgetProvider;
-import com.stratazima.instaviewer.widget.WidgetService;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 
 
 public class SetupActivity extends Activity {
@@ -35,9 +26,7 @@ public class SetupActivity extends Activity {
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if (extras != null) {
-            mAppWidgetId = extras.getInt(
-                    AppWidgetManager.EXTRA_APPWIDGET_ID,
-                    AppWidgetManager.INVALID_APPWIDGET_ID);
+            mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
         }
 
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
