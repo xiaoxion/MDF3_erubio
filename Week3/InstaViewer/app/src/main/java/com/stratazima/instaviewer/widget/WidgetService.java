@@ -1,5 +1,6 @@
 package com.stratazima.instaviewer.widget;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
@@ -9,16 +10,22 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.androidquery.AQuery;
+import com.androidquery.callback.AjaxCallback;
+import com.androidquery.callback.AjaxStatus;
+import com.stratazima.instaviewer.DetailActivity;
 import com.stratazima.instaviewer.R;
+import com.stratazima.instaviewer.processes.DataStorage;
 
-import java.io.File;
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Esau on 7/23/2014.
  */
-public class WidgetService  extends RemoteViewsService{
+public class WidgetService extends RemoteViewsService{
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
@@ -34,19 +41,11 @@ class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     public GridRemoteViewsFactory(Context context, Intent intent) {
         mContext = context;
-        mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                AppWidgetManager.INVALID_APPWIDGET_ID);
+        mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
     }
 
     public void onCreate() {
-        for (int i = 0; i < mCount; i++) {
-            mWidgetItems.add(new WidgetItem(i + "!"));
-        }
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
     }
 
     public void onDestroy() {
@@ -58,23 +57,26 @@ class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     }
 
     public RemoteViews getViewAt(int position) {
-        RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.widget_single);
+        final RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.widget_single);
 
-        final AQuery aQuery = new AQuery(mContext);
-        aQuery.cache("http://photos-a.ak.instagram.com/hphotos-ak-xap1/10540230_242154139328560_1395991422_a.jpg", 3000);
-        Bitmap bitmap = aQuery.getCachedImage("http://photos-a.ak.instagram.com/hphotos-ak-xap1/10540230_242154139328560_1395991422_a.jpg");
+        AQuery aq =  new AQuery(mContext);
+        String url = mWidgetItems.get(position).text;
 
-        rv.setImageViewBitmap(R.id.widget_single, bitmap);
+        aq.ajax(url, Bitmap.class, new AjaxCallback<Bitmap>(){
+            @Override
+            public void callback(String url, Bitmap object, AjaxStatus status) {
+                rv.setImageViewBitmap(R.id.widget_single, object);
+            }
+        });
 
         Bundle extras = new Bundle();
         extras.putInt(WidgetProvider.EXTRA_ITEM, position);
-        Intent fillInIntent = new Intent();
+        Intent fillInIntent = new Intent(mContext, DetailActivity.class);
         fillInIntent.putExtras(extras);
         rv.setOnClickFillInIntent(R.id.widget_single, fillInIntent);
 
         try {
-            System.out.println("Loading view " + position);
-            Thread.sleep(500);
+            Thread.sleep(150);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -99,6 +101,14 @@ class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     }
 
     public void onDataSetChanged() {
-
+        DataStorage dataStorage = DataStorage.getInstance(mContext);
+        JSONArray jsonArray = dataStorage.onReadFile();
+        for (int i = 0; i < mCount; i++) {
+            try {
+                mWidgetItems.add(new WidgetItem(jsonArray.getJSONObject(i).getJSONObject("images").getJSONObject("thumbnail").getString("url")));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
