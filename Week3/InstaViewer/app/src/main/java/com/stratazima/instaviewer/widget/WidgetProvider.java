@@ -7,11 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import com.stratazima.instaviewer.DetailActivity;
 import com.stratazima.instaviewer.R;
-
 
 /**
  * Created by Esau on 7/23/2014.
@@ -38,9 +36,7 @@ public class WidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        AppWidgetManager mgr = AppWidgetManager.getInstance(context);
         if (intent.getAction().equals(ACTIVITY_ACTION)) {
-            int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
             int viewIndex = intent.getIntExtra(EXTRA_ITEM, 0);
 
             Intent newIntent = new Intent(context, DetailActivity.class);
@@ -60,7 +56,6 @@ public class WidgetProvider extends AppWidgetProvider {
             intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
             RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_main);
             rv.setRemoteAdapter(appWidgetId, R.id.gridView, intent);
-
             rv.setEmptyView(R.id.gridView, R.id.empty_view);
 
             Intent toastIntent = new Intent(context, WidgetProvider.class);
@@ -74,48 +69,4 @@ public class WidgetProvider extends AppWidgetProvider {
         }
         super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
-
-//    @Override
-//    public void onReceive(Context context, Intent intent) {
-//        if (intent.getAction().equals(ACTION_WIDGET_FORWARD)) {
-//            Log.i("onReceive", ACTION_WIDGET_FORWARD);
-//        } else if (intent.getAction().equals(ACTION_WIDGET_BACK)) {
-//            Log.i("onReceive", ACTION_WIDGET_BACK);
-//        } else if (intent.getAction().equals(ACTION_WIDGET_CELL)) {
-//            Log.i("onReceive", ACTION_WIDGET_CELL);
-//        } else {
-//            super.onReceive(context, intent);
-//        }
-//        super.onReceive(context, intent);
-//    }
-//
-//    @Override
-//    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-//        for (int appWidgetId : appWidgetIds) {
-//            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_main);
-//
-//            Intent active = new Intent(context, WidgetProvider.class);
-//            active.setAction(ACTION_WIDGET_FORWARD);
-//            PendingIntent actionPendingIntent = PendingIntent.getBroadcast(context, 0, active, 0);
-//            //remoteViews.setOnClickPendingIntent(R.id.button_refresh, actionPendingIntent);
-//
-//            active = new Intent(context, WidgetProvider.class);
-//            active.setAction(ACTION_WIDGET_BACK);
-//            actionPendingIntent = PendingIntent.getBroadcast(context, 0, active, 0);
-//            //remoteViews.setOnClickPendingIntent(R.id.button_settings, actionPendingIntent);
-//
-//            active = new Intent(context, DetailActivity.class);
-//            active.setAction(ACTION_WIDGET_CELL);
-//            actionPendingIntent = PendingIntent.getBroadcast(context, 0, active, 0);
-//            remoteViews.setPendingIntentTemplate(R.id.widget_single, actionPendingIntent);
-//
-//            appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
-//        }
-//        super.onUpdate(context, appWidgetManager, appWidgetIds);
-//    }
-//
-//    public static final String ACTION_WIDGET_FORWARD = "com.stratazima.instaviewer.FORWARD";
-//    public static final String ACTION_WIDGET_BACK = "com.stratazima.instaviewer.BACK";
-//    public static final String ACTION_WIDGET_CELL = "com.stratazima.instaviewer.CELL";
-//    public static final String EXTRA_POSITION = "com.stratazima.instaviewer.POSITION";
 }

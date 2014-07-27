@@ -5,7 +5,17 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="empty">Loading…</string>
-    
-    <string name="data"></string>
+
+    <string name="username">Username</string>
+    <string name="like">Likes</string>
+    <string name="comment">Comment</string>
+
+    <string name="color">Color:</string>
+    <string name="red">Red</string>
+    <string name="green">Green</string>
+    <string name="blue">Blue</string>
+    <string name="transparency">Transparency:</string>
+    <string name="all">Load All Values:</string>
+    <string name="go">Enter Values</string>
 
 </resources>
