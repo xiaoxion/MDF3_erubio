@@ -13,6 +13,10 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.stratazima.workganize.fragments.FileRetrieveFragment;
+import com.stratazima.workganize.fragments.FileSaveFragment;
+import com.stratazima.workganize.fragments.WebViewFragment;
+
 public class MainActivity extends Activity implements ActionBar.TabListener {
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
@@ -85,13 +89,15 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
                     return WebViewFragment.newInstance(position + 1);
                 case 1:
                     return FileSaveFragment.newInstance(position + 1);
+                case 2:
+                    return FileRetrieveFragment.newInstance(position + 1);
             }
             return null;
         }
 
         @Override
         public int getCount() {
-            return 2;
+            return 3;
         }
 
         @Override
@@ -102,6 +108,8 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
                     return getString(R.string.title_section1).toUpperCase(l);
                 case 1:
                     return getString(R.string.title_section2).toUpperCase(l);
+                case 2:
+                    return getString(R.string.title_section3).toUpperCase(l);
             }
             return null;
         }
