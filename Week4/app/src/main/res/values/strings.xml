@@ -3,8 +3,7 @@
 
     <string name="app_name">Workganize</string>
     <string name="title_section1">Job Entry</string>
-    <string name="title_section2">Save Job</string>
-    <string name="title_section3">View Jobs</string>
+    <string name="title_section2">Save to Device</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
