@@ -1,15 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
+<resources>
 
-<<<<<<< HEAD
-<resources xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <style name="AppBaseTheme" parent="android:Theme.Holo.Wallpaper">
-=======
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+    <style name="AppTheme" parent="android:Theme.Holo.Wallpaper">
         <!-- Customize your theme here. -->
     </style>
->>>>>>> parent of 78ed8e8... beginning web app portion
 
-    </style>
 </resources>
