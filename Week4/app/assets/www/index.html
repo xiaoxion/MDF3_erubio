@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <link rel="stylesheet" type="text/css" href="css/custom.css"/>
+        <title>Workganize</title>
+
+        <!-- jQuery and jQuery Mobile Content -->
+        <link rel="stylesheet" href="css/jquery.mobile.structure-1.3.1.min.css" />
+        <script src="js/jquery-1.9.1.min.js"></script>
+        <script src="js/jquery.mobile-1.3.1.min.js"></script>
+        <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.0/jquery.validate.min.js"></script>
+
+    </head>
+    <body>
+        <div id="home" data-role="page">
+            <header data-role="header"  data-position="fixed" data-id="mainhead">
+                <img src="img/logo.png"/>
+            </header>
+            <section data-role="content">
+                <form action="#" method="post" id="additemform">
+                    <div data-role="fieldcontain">
+                        <label for="jName">What is the job Name?<span>*</span></label>
+                        <input type="text" name="jName" id="jName" class="required" autofocus="autofocus" placeholder="Hidden Colony Apts"/>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label for="jName">Where is it located?<span>*</span></label>
+                        <input type="text" name="lName" id="lName" class="required" autofocus="autofocus" placeholder="1800 Jon Doe Ln"/>
+                    </div>
+                    <div data-role="fieldcontain" id="typeOfWork">
+                    </div>
+                    <div data-role="fieldcontain">
+                        <fieldset data-role="controlgroup" data-type="horizontal">
+                            <legend>What is the Priority?</legend>
+                            <input type="radio" value="Low" id="low" name="priority" /><label for="low">Low</label>
+                            <input type="radio" checked value="Medium" id="medium" name="priority" /><label for="medium">Medium</label>
+                            <input type="radio" value="High" id="high" name="priority" /><label for="high">High</label>
+                        </fieldset>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label for="people">How many Worker(s) to send?</label>
+                        <input type="range" id="people" value="1" min="1" max="5" name="workersToSend" />
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label for="finishby">When to Finish?<span>*</span></label>
+                        <input type="date" name="finishby" id="finishby" class="required"/>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label for="notes">Additional Notes<span>*</span></label>
+                        <textarea id="notes" name="notes" placeholder="Put any important Job Information here!" class="required"></textarea>
+                    </div>
+                    <input type="submit" value="Submit" id="submit" data-theme="d" />
+                    <input type="reset" value="Cancel" id="cancel"/>
+                </form>
+                <p id="red">* These form fields are required!</p>
+            </section>
+        </div>
+
+        <script type="text/javascript" src="js/index.js"></script>
+        </script>
+    </body>
+</html>
