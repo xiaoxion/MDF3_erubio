@@ -40,7 +40,7 @@ $(document).on('pageinit','#home',function(){
             userInput.date = data[3].value;
 
             var json = JSON.stringify(userInput);
-
+            $('#additemform').trigger("reset");
             Android.saveData(json);
 
         }

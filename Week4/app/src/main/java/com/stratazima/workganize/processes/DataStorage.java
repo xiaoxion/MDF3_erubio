@@ -66,7 +66,7 @@ public class DataStorage implements Cloneable{
             FileOutputStream fos = mContext.openFileOutput("data.JSON", Context.MODE_PRIVATE);
             fos.write(tempJSON.toString().getBytes());
             fos.close();
-            Toast.makeText(mContext, "Saved!", Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, "Saved!", Toast.LENGTH_SHORT).show();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

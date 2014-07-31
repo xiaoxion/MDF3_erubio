@@ -10,5 +10,6 @@
     
     <string name="type">Type:</string>
     <string name="date">Due Date:</string>
+    <string name="refresh">Refresh</string>
 
 </resources>

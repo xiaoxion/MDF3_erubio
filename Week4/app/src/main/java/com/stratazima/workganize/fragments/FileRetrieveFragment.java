@@ -1,11 +1,12 @@
 package com.stratazima.workganize.fragments;
 
 import android.app.ListFragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.stratazima.workganize.R;
@@ -43,6 +44,13 @@ public class FileRetrieveFragment extends ListFragment {
         dataStorage = DataStorage.getInstance(getActivity());
         View rootView = inflater.inflate(R.layout.fragment_view, container, false);
         textView = (TextView) rootView.findViewById(R.id.enter_jobs);
+        ImageButton button = (ImageButton) rootView.findViewById(R.id.imageButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onReloadData();
+            }
+        });
 
         if (dataStorage.onCheckFile()) {
             onListCreate();
@@ -50,19 +58,17 @@ public class FileRetrieveFragment extends ListFragment {
         } else {
             textView.setVisibility(TextView.VISIBLE);
         }
+
         return rootView;
     }
 
-    @Override
-    public void onResume() {
+    public void onReloadData() {
         if (dataStorage.onCheckFile()) {
             onListCreate();
             textView.setVisibility(TextView.INVISIBLE);
         } else {
             textView.setVisibility(TextView.VISIBLE);
         }
-
-        super.onResume();
     }
 
     public void onListCreate() {
@@ -94,6 +100,7 @@ public class FileRetrieveFragment extends ListFragment {
                         e.printStackTrace();
                     }
                 }
+
                 HashMap<String,String> displayMap = new HashMap<String, String>();
                 displayMap.put("name", name);
                 displayMap.put("location", location);

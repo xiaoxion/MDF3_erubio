@@ -37,10 +37,13 @@ public class CustomList extends ArrayAdapter {
         TextView type = (TextView) rowView.findViewById(R.id.type);
         TextView date = (TextView) rowView.findViewById(R.id.date);
 
+        String tempDate = daArrayList.get(position).get("date");
+        String readableDate = tempDate.substring(5,10) + "-" + tempDate.substring(0,4);
+
         name.setText(daArrayList.get(position).get("name"));
         location.setText(daArrayList.get(position).get("location"));
         type.setText(daArrayList.get(position).get("type"));
-        date.setText(daArrayList.get(position).get("date"));
+        date.setText(readableDate);
 
         return rowView;
     }
