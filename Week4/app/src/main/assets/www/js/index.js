@@ -36,8 +36,8 @@ $(document).on('pageinit','#home',function(){
                 userInput = {};
             userInput.name = data[0].value ;
             userInput.location = data[1].value;
-            userInput.worktype = data[2].value;
-            userInput.finishby = data[3].value;
+            userInput.type = data[2].value;
+            userInput.date = data[3].value;
 
             var json = JSON.stringify(userInput);
 
