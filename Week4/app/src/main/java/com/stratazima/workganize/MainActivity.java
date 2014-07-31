@@ -10,11 +10,8 @@ import android.app.FragmentTransaction;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.stratazima.workganize.fragments.FileRetrieveFragment;
-import com.stratazima.workganize.fragments.FileSaveFragment;
 import com.stratazima.workganize.fragments.WebViewFragment;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
@@ -49,20 +46,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         }
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) return true;
-        return super.onOptionsItemSelected(item);
-    }
-
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         mViewPager.setCurrentItem(tab.getPosition());
@@ -88,8 +71,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
                 case 0:
                     return WebViewFragment.newInstance(position + 1);
                 case 1:
-                    return FileSaveFragment.newInstance(position + 1);
-                case 2:
                     return FileRetrieveFragment.newInstance(position + 1);
             }
             return null;
@@ -97,7 +78,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 
         @Override
         public int getCount() {
-            return 3;
+            return 2;
         }
 
         @Override
@@ -108,8 +89,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
                     return getString(R.string.title_section1).toUpperCase(l);
                 case 1:
                     return getString(R.string.title_section2).toUpperCase(l);
-                case 2:
-                    return getString(R.string.title_section3).toUpperCase(l);
             }
             return null;
         }

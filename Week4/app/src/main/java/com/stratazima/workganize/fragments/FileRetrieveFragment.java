@@ -1,6 +1,6 @@
 package com.stratazima.workganize.fragments;
 
-import android.app.Fragment;
+import android.app.ListFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +11,7 @@ import com.stratazima.workganize.R;
 /**
  * Created by esaurubio on 7/29/14.
  */
-public class FileRetrieveFragment extends Fragment {
+public class FileRetrieveFragment extends ListFragment {
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     public static FileRetrieveFragment newInstance(int sectionNumber) {

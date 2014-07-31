@@ -1,6 +1,7 @@
 package com.stratazima.workganize.processes;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,12 +38,8 @@ public class DataStorage implements Cloneable{
      * is an existing file.
      */
     public boolean onCheckFile() {
-        Boolean fileExist = false;
-
         File file = new File(mContext.getFilesDir().getPath() + "/data.JSON");
-        if (file.exists()) fileExist = true;
-
-        return fileExist;
+        return file.exists();
     }
 
     /**
@@ -50,18 +47,26 @@ public class DataStorage implements Cloneable{
      */
     public void onWriteFile(JSONObject jsonObject) {
         JSONArray tempJSON;
-        if (onReadFile() == null || onCheckFile()) {
+
+        if (onCheckFile()) {
+            if (onReadFile() == null) {
+                tempJSON = new JSONArray();
+                tempJSON.put(jsonObject);
+            } else {
+                tempJSON = onReadFile();
+                tempJSON.put(jsonObject);
+            }
+        } else {
             tempJSON = new JSONArray();
             tempJSON.put(jsonObject);
-        } else {
-            tempJSON = onReadFile();
-            tempJSON.put(jsonObject);
         }
+
 
         try {
             FileOutputStream fos = mContext.openFileOutput("data.JSON", Context.MODE_PRIVATE);
             fos.write(tempJSON.toString().getBytes());
             fos.close();
+            Toast.makeText(mContext, "Saved!", Toast.LENGTH_LONG).show();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

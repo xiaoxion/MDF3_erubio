@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <link rel="stylesheet" type="text/css" href="css/custom.css"/>
+        <title>Workganize</title>
+
+        <!-- jQuery and jQuery Mobile Content -->
+        <link rel="stylesheet" href="css/jquery.mobile.structure-1.3.1.min.css" />
+        <script src="js/jquery.min.js"></script>
+        <script src="js/jquery.mobile.min.js"></script>
+        <script src="js/jquery.validate.js"></script>
+
+    </head>
+    <body>
+        <div id="home" data-role="page">
+            <header data-role="header"  data-position="fixed" data-id="mainhead">
+                <img src="img/logo.png"/>
+            </header>
+            <section data-role="content">
+                <form action="#" method="post" id="additemform">
+                    <div data-role="fieldcontain">
+                        <label for="jName">What is the job Name?<span>*</span></label>
+                        <input type="text" name="jName" id="jName" class="required" autofocus="autofocus" placeholder="Hidden Colony Apts"/>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label for="location">Where is it located?<span>*</span></label>
+                        <input type="text" name="location" id="location" class="required" autofocus="autofocus" placeholder="1800 Jon Doe Ln"/>
+                    </div>
+                    <div data-role="fieldcontain" id="typeOfWork"></div>
+                    <div data-role="fieldcontain">
+                        <label for="finishby">When to Finish?<span>*</span></label>
+                        <input type="date" name="finishby" id="finishby" class="required"/>
+                    </div>
+                    <input type="submit" value="Submit" id="submit" data-theme="d" />
+                    <input type="reset" value="Cancel" id="cancel"/>
+                </form>
+                <p id="red">* These form fields are required!</p>
+            </section>
+        </div>
+
+        <script type="text/javascript" src="js/index.js"></script>
+    </body>
+</html>
